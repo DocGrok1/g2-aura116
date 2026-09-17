@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>G² — Pages face · mouth 116:3100</title>
+  <style>
+    *{margin:0;box-sizing:border-box}body{background:#020408;color:#c0d8e8;font-family:system-ui;min-height:100vh;display:flex;flex-direction:column}
+    .header{padding:16px;background:#14120c;border-bottom:1px solid #3a3220}
+    h1{color:#f4c430;font-size:16px;letter-spacing:2px}.sub{color:#8a7e62;font-size:11px}
+    .messages{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+    .msg{padding:10px 14px;border-radius:12px;max-width:88%;font-size:14px;white-space:pre-wrap}
+    .user{background:#1a2a4a;align-self:flex-end}.g2{background:#14110c;color:#f4c430;align-self:flex-start;border:1px solid #3a3220}
+    .system{color:#3a5a7a;font-size:11px;align-self:center;text-align:center}
+    .bar{display:flex;flex-wrap:wrap;gap:12px;padding:6px 12px;font-size:10px;color:#3a5a7a;border-top:1px solid #0a1a2a}
+    .live{color:#f4c430}.row{display:flex;gap:8px;padding:12px;border-top:1px solid #3a3220}
+    input{flex:1;background:#0d1a2a;border:1px solid #3a3220;border-radius:8px;padding:12px;color:#c0d8e8}
+    button{background:#f4c430;border:none;border-radius:8px;padding:12px 16px;font-weight:700}
+  </style>
+</head>
+<body>
+<div class="header">
+  <h1>G² · PAGES FACE</h1>
+  <div class="sub">GitHub Pages surface · inference on Aura116 Express :3100</div>
+</div>
+<div class="messages" id="m"><div class="msg system">Pages host. Mouth is 116.</div></div>
+<div class="bar"><span>API: <span class="live" id="apiHint">116</span></span></div>
+<div class="row"><input id="i" placeholder="Talk to G²..."/><button id="s">Send</button></div>
+<script>
+const API = (new URLSearchParams(location.search).get('api')) || 'https://aura116-production.up.railway.app';
+document.getElementById('apiHint').textContent = API;
+const USER = new URLSearchParams(location.search).get('user') || ('g2-' + Math.random().toString(36).slice(2,8));
+const JET = new URLSearchParams(location.search).get('jetbase') || '';
+const m = document.getElementById('m'); const i = document.getElementById('i'); let hist = [];
+function add(c,t){const e=document.createElement('div');e.className='msg '+c;e.textContent=t;m.appendChild(e);m.scrollTop=m.scrollHeight;}
+async function send(){
+  const t=i.value.trim(); if(!t)return; i.value=''; add('user',t); add('system','116:3100...');
+  try{
+    const r=await fetch(API+'/api/governed-grok-chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:t,history:hist,userId:USER,jetbaseId:JET,source:'g2-pages'})});
+    const d=await r.json(); m.lastChild.remove();
+    if(d.ok&&d.response){add('g2',d.response);hist.push({role:'user',content:t},{role:'assistant',content:String(d.response).slice(0,4000)});}
+    else add('system','HOLD '+(d.error||d.reason||JSON.stringify(d)));
+  }catch(e){m.lastChild.remove();add('system',e.message);}
+}
+document.getElementById('s').onclick=send; i.addEventListener('keydown',e=>{if(e.key==='Enter')send();});
+</script>
+</body>
+</html>
