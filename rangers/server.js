@@ -188,7 +188,7 @@ server.listen(port, () => {
   console.log('[g2-rangers] listening on ' + port + ' · aura ' + BASE + ' · enabled ' + ENABLED());
   const tick = async () => {
     state.next_run_utc = new Date(Date.now() + INTERVAL()).toISOString();
-    if (ENABLED()) { try { const r = await runOnce('schedule'); console.log('[g2-rangers] run', r.run_id, 'ok', r.ok); } catch (e) { console.warn('[g2-rangers] run failed', e && e.message); } }
+    if (ENABLED()) { try { const r = await runOnce('schedule'); console.log('[g2-rangers] run ' + JSON.stringify(summary(r))); } catch (e) { console.warn('[g2-rangers] run failed', e && e.message); } }
   };
   setTimeout(tick, 15000);
   setInterval(tick, INTERVAL());
