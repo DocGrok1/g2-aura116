@@ -1,0 +1,9 @@
+{
+  "name": "g2-rangers",
+  "version": "1.0.0",
+  "private": true,
+  "description": "G² Rangers — Ranger group on the G² service; answers through AURA's chain, AREX-P3Q envelope + P3Q seal lane.",
+  "main": "rangers/server.js",
+  "scripts": { "start": "node rangers/server.js" },
+  "engines": { "node": ">=20" }
+}
